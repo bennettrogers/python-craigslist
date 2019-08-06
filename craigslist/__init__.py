@@ -17,7 +17,7 @@ from six.moves import range
 
 from .sites import get_all_sites
 
-ALL_SITES = get_all_sites()  # All the Craiglist sites
+#  ALL_SITES = get_all_sites()  # All the Craiglist sites
 RESULTS_PER_REQUEST = 100  # Craigslist returns 100 results per request
 
 
@@ -33,7 +33,9 @@ def requests_get(*args, **kwargs):
 
     logger = kwargs.pop('logger', None)
     try:
-        return requests.get(*args, **kwargs)
+        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.1'}
+        response = requests.get(*args, **kwargs, headers=headers)
+        return response
     except RequestException as exc:
         if logger:
             logger.warning('Request failed (%s). Retrying ...', exc)
@@ -90,16 +92,16 @@ class CraigslistBase(object):
         self.set_logger(log_level, init=True)
 
         self.site = site or self.default_site
-        if self.site not in ALL_SITES:
-            msg = "'%s' is not a valid site" % self.site
-            self.logger.error(msg)
-            raise ValueError(msg)
+        #  if self.site not in ALL_SITES:
+            #  msg = "'%s' is not a valid site" % self.site
+            #  self.logger.error(msg)
+            #  raise ValueError(msg)
 
-        if area:
-            if not self.is_valid_area(area):
-                msg = "'%s' is not a valid area for site '%s'" % (area, site)
-                self.logger.error(msg)
-                raise ValueError(msg)
+        #  if area:
+            #  if not self.is_valid_area(area):
+                #  msg = "'%s' is not a valid area for site '%s'" % (area, site)
+                #  self.logger.error(msg)
+                #  raise ValueError(msg)
         self.area = area
 
         self.category = category or self.default_category
